@@ -44,3 +44,5 @@ model Comment {
   article Article @relation(fields: [articleId], references:[id])
   user User @relation(fields: [userId], references:[id])
 }
+
+

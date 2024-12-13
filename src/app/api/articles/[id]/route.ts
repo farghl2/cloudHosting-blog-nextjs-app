@@ -29,12 +29,18 @@ export async function GET(req: NextRequest, {params}: Props){
  */
 
 export async function PUT(req: NextRequest, {params}: Props){
-    const article = await prisma.article.findUnique({where:{id: +params.id}})
+    const article = await prisma.article.findUnique({where:{id: +params.id}});
 
     if(!article) return NextResponse.json({message:'article not found'}, {status:404})
 
         const body = (await req.json()) as UpdateArticeDto
-        console.log(body);
+       await prisma.article.update({
+        where:{id:+params.id},
+        data:{
+            title:body.title,
+            description:body.description
+        }
+       })
     return NextResponse.json({message:'article updated'}, {status:201})
 
 }
@@ -49,7 +55,7 @@ export async function DELETE(req: NextRequest, {params}: Props){
     const article =await prisma.article.findUnique({where:{id: +params.id}})
     if(!article) return NextResponse.json({message:'article not found'}, {status:404})
 
-       
+    await prisma.article.delete({where:{id:+params.id}});
     return NextResponse.json({message:'article deleted'}, {status:201})
 
 }
