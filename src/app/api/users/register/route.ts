@@ -6,6 +6,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 
 import * as bcrypt from 'bcryptjs';
+import gJWT from "@/utils/gJWT";
 
 
 /**
@@ -45,7 +46,8 @@ export async function POST(req: NextRequest){
             }
           })
 
-          const token = null;
+        
+          const token = gJWT(newUser);
           return NextResponse.json({...newUser,token},{status:201});
         
     } catch (error) {

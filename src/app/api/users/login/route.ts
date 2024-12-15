@@ -6,6 +6,9 @@ import { NextResponse, NextRequest } from "next/server";
 
 
 import * as bcrypt from 'bcryptjs';
+import gJWT from "@/utils/gJWT";
+
+
 
 
 /**
@@ -31,8 +34,12 @@ export async function POST(req: NextRequest){
 
            const isPasswordMatched = await bcrypt.compare(body.password, user.password)
           if(!isPasswordMatched) return NextResponse.json({message: 'invalid password'}, {status:400})
-
-          const token = null;
+          const jwtPayload = {
+            id:user.id,
+            isAdmin:user.isAdmin,
+            username:user.username
+          }  
+          const token =gJWT(jwtPayload)
           return NextResponse.json({...user, token},{status:200});
         
     } catch (error) {
