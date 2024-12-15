@@ -7,12 +7,14 @@ import { NextResponse, NextRequest } from "next/server";
 
 import * as bcrypt from 'bcryptjs';
 import gJWT from "@/utils/gJWT";
+import gCookie from "@/utils/gCookie";
+
 
 
 
 
 /**
- * @method
+ * @method POST
  * @route ~/api/users/login
  * @desc login user
  * @access public
@@ -40,7 +42,10 @@ export async function POST(req: NextRequest){
             username:user.username
           }  
           const token =gJWT(jwtPayload)
-          return NextResponse.json({...user, token},{status:200});
+          const cookie = gCookie(token)
+          return NextResponse.json({...user},{status:200,
+            headers:{"Set-Cookie":cookie}
+          });
         
     } catch (error) {
         return NextResponse.json({message: `internal server error ${error}`}, {status:500})

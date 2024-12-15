@@ -7,6 +7,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 import * as bcrypt from 'bcryptjs';
 import gJWT from "@/utils/gJWT";
+import gCookie from "@/utils/gCookie";
 
 
 /**
@@ -48,7 +49,10 @@ export async function POST(req: NextRequest){
 
         
           const token = gJWT(newUser);
-          return NextResponse.json({...newUser,token},{status:201});
+            const cookie = gCookie(token)
+          return NextResponse.json({...newUser},{status:201,
+            headers:{'Set-Cookie':cookie}
+          });
         
     } catch (error) {
         return NextResponse.json({message: `internal server error ${error}`}, {status:500})

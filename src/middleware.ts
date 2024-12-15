@@ -1,9 +1,9 @@
-import { NextApiRequest } from "next";
-import {  NextResponse } from "next/server";
+
+import {  NextRequest, NextResponse } from "next/server";
 
 
-export function middleware(req:NextApiRequest) {
-    const token = req.headers.authorization?.split(' ')[1]
+export function middleware(req:NextRequest) {
+    const token = req.cookies.get('jwtToken')?.value as string
         if(!token) return NextResponse.json({message:'Authorization token is required'}, {status:401});
     
 }
