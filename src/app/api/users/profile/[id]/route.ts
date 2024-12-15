@@ -15,9 +15,9 @@ interface Props {
 
 export async function DELETE(req: NextApiRequest, {params}:Props) {
     const {id} = params;
-    const token = req.headers.authorization?.split(' ')[1]
-    if(!token) return NextResponse.json({message:'Authorization token is required'}, {status:401});
+    
     try{
+        const token = req.headers.authorization?.split(' ')[1] as string
         const decode = jwt.verify(token, process.env.JWT_SECRET as string)
         if(!decode) return NextResponse.json({message:'Invalid or expired token'}, {status:401});
         await prisma.user.delete({where:{id: +id}});
