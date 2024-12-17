@@ -17,3 +17,9 @@ export interface LoginDto {
     email:string,
     password:string
 }
+
+export interface UpdatedUserDto {
+    email?:string,
+    password?:string,
+    username?:string
+}
