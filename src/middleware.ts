@@ -9,5 +9,5 @@ export function middleware(req:NextRequest) {
 }
 
 export const config = {
-    matcher:['/api/users/profile/:path*']
+    matcher:['/api/users/profile/:path*', '/api/comments/:path*']
 }

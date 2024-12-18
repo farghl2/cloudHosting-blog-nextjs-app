@@ -4,3 +4,10 @@ export type Article ={
     title:string,
     description:string
   }
+
+  export type decodeUser ={
+    id:string,
+    email: string,
+    username:string,
+    isAdmin:boolean
+  }

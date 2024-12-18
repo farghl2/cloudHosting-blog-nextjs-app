@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/utils/db";
 import * as bcrypt from 'bcryptjs';
 
-import jwt from "jsonwebtoken";
 import { UpdatedUserDto } from "@/utils/dtos";
+import { verifyToken } from "@/utils/verifyToken";
 interface Props {
   params: { id: string };
 }
@@ -19,8 +19,8 @@ export async function DELETE(req: NextRequest, { params }: Props) {
   const { id } = params;
 
   try {
-    const token = req.cookies.get("jwtToken")?.value as string;
-    const decode = jwt.verify(token, process.env.JWT_SECRET as string);
+    
+    const decode = verifyToken(req);
     if (!decode)
       return NextResponse.json(
         { message: "Invalid or expired token" },

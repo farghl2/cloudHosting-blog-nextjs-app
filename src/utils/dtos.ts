@@ -23,3 +23,9 @@ export interface UpdatedUserDto {
     password?:string,
     username?:string
 }
+
+export interface CreateCommentDto {
+    articleId: string,
+    userId: string,
+    text: string
+}
