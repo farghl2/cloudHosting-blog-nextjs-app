@@ -29,3 +29,7 @@ export interface CreateCommentDto {
     userId: string,
     text: string
 }
+
+export interface UpdateCommentDto {
+    text?:string
+}

@@ -2,6 +2,7 @@
 import { UpdateArticeDto } from "@/utils/dtos";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/utils/db";
+import { verifyToken } from "@/utils/verifyToken";
 
 interface Props {
     params: {id:string}
@@ -25,12 +26,13 @@ export async function GET(req: NextRequest, {params}: Props){
  * @method PUT
  * @route ~/api/articles/:id
  * @desc update single Article By Id
- * @access public
+ * @access private (admin only)
  */
 
 export async function PUT(req: NextRequest, {params}: Props){
+    const user = verifyToken(req);
+    if(user === null || user.isAdmin === false) return NextResponse.json({message: 'only admin, access denid'}, {status: 403});
     const article = await prisma.article.findUnique({where:{id: +params.id}});
-
     if(!article) return NextResponse.json({message:'article not found'}, {status:404})
 
         const body = (await req.json()) as UpdateArticeDto
@@ -48,10 +50,12 @@ export async function PUT(req: NextRequest, {params}: Props){
  * @method DELETE
  * @route ~/api/articles/:id
  * @desc delete Article By Id
- * @access public
+ * @access private (only admin)
  */
 
 export async function DELETE(req: NextRequest, {params}: Props){
+    const user = verifyToken(req);
+    if(user === null || user.isAdmin === false) return NextResponse.json({message: 'only admin, access denid'}, {status: 403}); 
     const article =await prisma.article.findUnique({where:{id: +params.id}})
     if(!article) return NextResponse.json({message:'article not found'}, {status:404})
 

@@ -5,6 +5,8 @@ import { createArticleSchema } from "@/utils/validationShemas";
 import { NextRequest, NextResponse } from "next/server";
 import { Article } from "@prisma/client";
 import prisma from "@/utils/db";
+import { verifyToken } from "@/utils/verifyToken";
+import { ARTICLES_PER_PAGE } from "@/utils/constants";
 
 /**
  * @method GET
@@ -12,9 +14,17 @@ import prisma from "@/utils/db";
  * @desc Get All Artices
  * @access public
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
-        const articles = await prisma.article.findMany();
+
+      const pageNumber = req.nextUrl.searchParams.get('pagenumber') || '1';
+      
+        const articles = await prisma.article.findMany(
+          {
+            skip:ARTICLES_PER_PAGE *( +pageNumber -1),
+            take:ARTICLES_PER_PAGE
+          }
+        );
 
         
         return NextResponse.json(articles, { status: 200 });
@@ -31,10 +41,12 @@ export async function GET() {
  * @method POST
  * @route ~/api/articles
  * @desc Create new article
- * @access public
+ * @access private (only admin)
  */
 export async function POST(req: NextRequest) {
   try {
+      const user = verifyToken(req);
+        if(user === null || user.isAdmin === false) return NextResponse.json({message: 'only admin, access denid'}, {status: 403});
     const body: CreateArticeDto = (await req.json()) as CreateArticeDto;
 
   const validation = createArticleSchema.safeParse(body);
