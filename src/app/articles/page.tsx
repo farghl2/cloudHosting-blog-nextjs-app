@@ -1,23 +1,29 @@
+import { getArticles, getArticlesCount } from "@/apiCalls/articleApiCall";
 import ArticleItem from "@/components/articles/ArticleItem";
 import Pagination from "@/components/articles/Pagination";
 import SearchArticleInput from "@/components/articles/SearchArticleInput";
-import { Article } from "@/utils/types";
+import { ARTICLES_PER_PAGE } from "@/utils/constants";
+import { Article } from "@prisma/client";
 
-const ArticlesPage = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts",
-    {next:{revalidate:50}});
-  if(!res.ok) throw new Error('faild to fetch articles')
-  const articles: Article[] = await res.json();
+interface ArticlePageProps {
+  searchParams:{pageNumber:string}
+}
 
+const ArticlesPage = async ({searchParams}:ArticlePageProps) => {
+  const {pageNumber} = searchParams
+  
+  const articles:Article [] = await getArticles(pageNumber);
+  const count:number =await getArticlesCount();
+  const pages =Math.ceil(count /ARTICLES_PER_PAGE);
   return (
     <section className="fix-height container m-auto px-5">
       <SearchArticleInput />
       <div className="flex justify-center gap-5 items-center flex-wrap my-8">
-        {articles.slice(0, 6).map((item) => (
+        {articles.map((item) => (
           <ArticleItem article={item} key={item.id} />
         ))}
       </div>
-      <Pagination />
+      <Pagination pageNumber={+pageNumber} pages={pages}  route="/articles" />
     </section>
   );
 };

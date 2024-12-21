@@ -1,4 +1,5 @@
-import { Article } from "@/utils/types";
+
+import { Article } from "@prisma/client";
 import Link from "next/link";
 
 type articleItemProps = {
@@ -15,7 +16,7 @@ const ArticleItem = ({ article }: articleItemProps) => {
     >
       <h3 className="text-xl font-bold text-gray-900 line-clamp-1">{article.title}</h3>
       <p className="my-2 text-xl text-gray-700 p-1 line-clamp-1">
-        {article.body}
+        {article.description}
       </p>
       <Link
         href={`/articles/${article.id}`}
