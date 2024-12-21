@@ -15,7 +15,11 @@ interface Props {
  */
 
 export async function GET(req: NextRequest, {params}: Props){
-    const article =await prisma.article.findUnique({where:{id: +params.id}})
+    const article =await prisma.article.findUnique({where:{id: +params.id},
+    include:{comments:{
+        include:{user:{select:{username:true}}}
+    }}
+    })
 
     if(!article) return NextResponse.json({message:'article not found'}, {status:404})
     return NextResponse.json(article, {status:200})
@@ -56,9 +60,15 @@ export async function PUT(req: NextRequest, {params}: Props){
 export async function DELETE(req: NextRequest, {params}: Props){
     const user = verifyToken(req);
     if(user === null || user.isAdmin === false) return NextResponse.json({message: 'only admin, access denid'}, {status: 403}); 
-    const article =await prisma.article.findUnique({where:{id: +params.id}})
+    const article =await prisma.article.findUnique({where:{id: +params.id},
+    include:{comments:true}
+    })
     if(!article) return NextResponse.json({message:'article not found'}, {status:404})
 
+    const commentIds:number[] = article?.comments.map(comment=>comment.id);
+    await prisma.comment.deleteMany({
+        where:{id:{in:commentIds}}
+    })
     await prisma.article.delete({where:{id:+params.id}});
     return NextResponse.json({message:'article deleted'}, {status:201})
 

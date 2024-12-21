@@ -26,7 +26,11 @@ export async function DELETE(req: NextRequest, { params }: Props) {
         { message: "Invalid or expired token" },
         { status: 401 }
       );
-    await prisma.user.delete({ where: { id: +id } });
+    const user = await prisma.user.delete({ where: { id: +id },include:{comments:true} });
+    const commentIds:number [] = user.comments.map(comment=>comment.id);
+    await prisma.comment.deleteMany({
+      where:{id:{in:commentIds}}
+    })
     return NextResponse.json({ message: "user was deleted" }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: `internal server error ${error}` });
