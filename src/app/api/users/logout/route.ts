@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 
 
@@ -10,10 +11,12 @@ import { NextRequest, NextResponse } from "next/server";
  */
 
 
-export function GET(req: NextRequest) {
+export function GET() {
     try {
-        req.cookies.delete('jwtToken');
-         return NextResponse.json({message: 'user logout'}, {status:200})
+        cookies().delete('jwtToken')
+         return NextResponse.json({message: 'user logout'}, {status:200,
+     
+         })
     } catch (error) {
         return NextResponse.json({message: `internal server error ${error}`}, {status:500})
     }

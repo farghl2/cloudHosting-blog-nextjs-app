@@ -1,5 +1,6 @@
 "use client"
 
+import { DOMAIN } from "@/utils/constants";
 import axios from "axios";
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify";
@@ -8,7 +9,7 @@ function LogoutBtn() {
     const router = useRouter();
     const logoutHandler = async()=>{
         try {
-            await axios.get(`${process.env.API_URL}/users/logout`);
+            await axios.get(`${DOMAIN}/users/logout`);
             router.push('/');
             router.refresh();
         } catch (error) {

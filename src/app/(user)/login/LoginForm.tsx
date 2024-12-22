@@ -5,6 +5,7 @@ import { toast } from "react-toastify"
 
 import { useRouter } from "next/navigation"
 import axios from "axios"
+import { DOMAIN } from "@/utils/constants"
 
 const LoginForm = () => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const LoginForm = () => {
         if(login.email === "") return toast.error('email is Required')
         if(login.password === "") return toast.error('email is Required')
           try {
-        await axios.post(`${process.env.API_URL}/users/login`, {email: login.email, password: login.password});
+        await axios.post(`${DOMAIN}/users/login`, {email: login.email, password: login.password});
         router.replace('/');
         router.refresh();
 

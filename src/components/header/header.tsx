@@ -4,7 +4,7 @@ import styles from './header.module.css'
 import Navbar from "./navbar"
 import { cookies } from "next/headers"
 import { verifyTokenForPages } from "@/utils/verifyToken"
-import LogoutBtn from "./LogOutBtn"
+import LogoutBtn from "./LogoutBtn"
 
 const Header = () => {
   const token = cookies().get('jwtToken')?.value || '';
