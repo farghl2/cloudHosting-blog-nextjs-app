@@ -4,6 +4,8 @@ import CustomInput from "@/components/CustomInput"
 import { toast } from "react-toastify"
 
 import { useRouter } from "next/navigation"
+import axios from "axios"
+
 const LoginForm = () => {
   const router = useRouter();
     const [login, setLogin] = useState({
@@ -11,13 +13,22 @@ const LoginForm = () => {
         password:''
     })
 
-    const formSubmitHandler =(e:React.FormEvent)=>{
+    const formSubmitHandler =async(e:React.FormEvent)=>{
         e.preventDefault();
         if(login.email === "") return toast.error('email is Required')
         if(login.password === "") return toast.error('email is Required')
-        console.log(login);
-
+          try {
+        await axios.post(`${process.env.API_URL}/users/login`, {email: login.email, password: login.password});
         router.replace('/');
+        router.refresh();
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } catch (error:any) {
+            toast.error(error?.response?.data.message)
+            console.log(error)
+          }
+
+
 
 
     }
