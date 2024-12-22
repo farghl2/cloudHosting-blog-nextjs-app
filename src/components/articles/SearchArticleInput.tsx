@@ -1,15 +1,17 @@
 'use client'
 import { useState } from "react"
 import CustomInput from "@/components/CustomInput"
+import { useRouter } from "next/navigation";
 
 
 const SearchArticleInput = () => {
    const [searchText, setSearchText] = useState('');
+   const router = useRouter();
 
     const formSubmitHandler =(e:React.FormEvent)=>{
         e.preventDefault();
-        
-        console.log(searchText)
+     return   router.push(`articles/search?searchText=${searchText}`);
+       
 
     }
   return (

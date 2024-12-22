@@ -14,7 +14,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest){
     try {
         
-        const searchTitle = req.nextUrl.searchParams.get('searchArticle');
+        const searchTitle = req.nextUrl.searchParams.get('searchText');
     
         const articles:Article [] = await prisma.article.findMany({
             where:{

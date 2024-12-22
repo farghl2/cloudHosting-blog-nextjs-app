@@ -15,3 +15,10 @@ export async function getArticlesCount ():Promise<number>{
   const {count} = await res.json() as {count:number}
   return count ;
 }
+
+//get articles based on search text 
+export async function getArticlesBySearchText (searchText: string):Promise<Article []>{
+  const res = await fetch(`${process.env.API_URL}/articles/searchArticle?searchText=${searchText}`);
+  if(!res.ok) throw new Error('faild to fetch articles')
+  return await res.json();
+}
