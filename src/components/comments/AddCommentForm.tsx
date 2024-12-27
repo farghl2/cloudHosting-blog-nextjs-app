@@ -2,15 +2,28 @@
 import { useState } from "react"
 import CustomInput from "@/components/CustomInput"
 import {toast} from 'react-toastify'
+import axios from "axios"
+import { DOMAIN } from "@/utils/constants"
+import { useRouter } from "next/navigation"
+
+type AddCommentFormProps ={
+  articleId: number,
 
 
-const AddCommentForm = () => {
+}
+const AddCommentForm = ({articleId}:AddCommentFormProps) => {
    const [text, setText] = useState('');
+   const router = useRouter();
 
-    const formSubmitHandler =(e:React.FormEvent)=>{
+    const formSubmitHandler =async (e:React.FormEvent)=>{
         e.preventDefault();
         if(text === '' ) return toast.error('Please write something')
-        console.log(text)
+          try {
+            await axios.post(`${DOMAIN}/comments`, {text,articleId });
+            router.refresh();
+          } catch (error) {
+            console.log(error)
+          }
 
     }
   return (

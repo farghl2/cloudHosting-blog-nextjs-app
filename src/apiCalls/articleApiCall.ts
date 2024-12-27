@@ -1,3 +1,4 @@
+import { SingleArticle } from "@/utils/types";
 import { Article } from "@prisma/client";
 
 //get articles base on page number
@@ -21,4 +22,17 @@ export async function getArticlesBySearchText (searchText: string):Promise<Artic
   const res = await fetch(`${process.env.API_URL}/articles/searchArticle?searchText=${searchText}`);
   if(!res.ok) throw new Error('faild to fetch articles')
   return await res.json();
+}
+
+// get single article by id
+
+export async function getSingleArticle(id:string):Promise<SingleArticle>{
+  const res = await fetch(`${process.env.API_URL}/articles/${id}`,
+    {
+      cache:'no-store'
+    }
+  );
+  if(!res.ok) throw new Error('faild to fetch articles')
+  return await res.json();
+
 }

@@ -23,7 +23,8 @@ export async function POST(req: NextRequest) {
         {data:{
             text:body.text,
             articleId: +body.articleId,
-            userId: +user.id
+            userId: +user!.id
+          
         }}
     )
     
