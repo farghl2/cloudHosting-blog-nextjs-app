@@ -1,9 +1,13 @@
+
+
 import { getSingleArticle } from "@/apiCalls/articleApiCall";
 import AddCommentForm from "@/components/comments/AddCommentForm";
 import CommentItem from "@/components/comments/CommentItem";
+
 import { SingleArticle } from "@/utils/types";
 import { verifyTokenForPages } from "@/utils/verifyToken";
 import { cookies } from "next/headers";
+
 
 
 type SingleArticlePageProps = {
@@ -13,10 +17,12 @@ const SingleArticlePage = async ({ params }: SingleArticlePageProps) => {
   const jwtToken = cookies().get('jwtToken')?.value || ' ';
   const payload = verifyTokenForPages(jwtToken);
 
+ 
+
   const article: SingleArticle = await getSingleArticle(params.id)
 
   return (
-    <section className="fix-height  container m-auto flex justify-center px-5 pt-8 md:w-3/4">
+    <section className="fix-height  container m-auto flex flex-col justify-center px-5 pt-8 md:w-3/4">
       <div className="flex flex-col gap-4 w-2/4 p-7 rounded-lg bg-white mb-4">
         <h2 className="text-3xl font-bold text-gray-700">{article.title}</h2>
         <div className="text-gray-400">{new Date(article.createdAt).toDateString()}</div>
@@ -34,9 +40,12 @@ const SingleArticlePage = async ({ params }: SingleArticlePageProps) => {
         Comments
       </h4>
       {article.comments.map(comment=>
-      <CommentItem key={comment.id} articleComment={comment}/>
+      <CommentItem 
+      userId={payload?.id || ''}
+      key={comment.id} articleComment={comment}/>
 
       )}
+      
       
     </section>
   );

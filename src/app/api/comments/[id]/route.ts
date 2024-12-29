@@ -49,7 +49,7 @@ export async function DELETE(req: NextRequest, {params}:Props) {
     const user = verifyToken(req);
     const comment =await prisma.comment.findUnique({where:{id: +id}});
     if(!comment) return NextResponse.json({message: 'comment not found'},{status:404});
-    if(+user.id != comment.userId || user.isAdmin === false) return NextResponse.json({message: 'you cannot update this comment'},{status:403});
+    if(+user!.id != comment.userId  || user?.isAdmin) return NextResponse.json({message: 'you cannot delete this comment'},{status:403});
     await prisma.comment.delete({where:{id:+id}});
     return NextResponse.json({message: 'comment deleted succefuly'}, {status: 200});
 
