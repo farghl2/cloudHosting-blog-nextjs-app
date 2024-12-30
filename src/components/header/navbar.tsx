@@ -7,7 +7,10 @@ import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 
-const Navbar = () => {
+type NavbarProps = {
+  isAdmin:boolean
+}
+const Navbar = ({isAdmin}:NavbarProps) => {
   const [toggle, setToggle] = useState(false);
 
   return (
@@ -40,7 +43,8 @@ const Navbar = () => {
             >Home</Link>
             <Link href={'/articles?pageNumber=1'} className={styles.navLink}>Articles</Link>
             <Link href={'/about'} className={styles.navLink}>About</Link>
-            <Link href={'/admin'} className={styles.navLink}>Admin</Link>
+             
+            {isAdmin && <Link href={'/admin'} className={styles.navLink}>Admin</Link>}
         </ul>
         </div>
     </nav>

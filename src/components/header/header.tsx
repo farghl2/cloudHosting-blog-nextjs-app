@@ -11,7 +11,7 @@ const Header = () => {
   const user = verifyTokenForPages(token);
   return (
    <header className={styles.header}>
-    <Navbar />
+    <Navbar isAdmin={user?.isAdmin || false} />
     <div className={styles.right}>
       {user !==null?(
         <>

@@ -1,8 +1,13 @@
+import ProtectForAdmin from '@/components/ProtectForAdmin'
 import React from 'react'
 
 const AdminCommentsTable = () => {
   return (
-    <div> AdminCommentsTable</div>
+    <ProtectForAdmin>
+      <div> AdminCommentsTable</div>
+
+
+    </ProtectForAdmin>
   )
 }
 

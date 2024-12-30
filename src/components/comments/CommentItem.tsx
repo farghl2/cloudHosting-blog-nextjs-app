@@ -11,10 +11,11 @@ import { useRouter } from "next/navigation";
 
 type CommentItemProps ={
     articleComment: CommentWithUser,
-    userId:string
+    userId:string,
+    isAdmin:boolean
 }
 
-const CommentItem = ({articleComment, userId}:CommentItemProps) => {
+const CommentItem = ({articleComment, userId,isAdmin}:CommentItemProps) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
 
@@ -46,7 +47,7 @@ const CommentItem = ({articleComment, userId}:CommentItemProps) => {
         </p>
 
         {
-            userId && +userId === articleComment.userId &&
+            (userId && +userId === articleComment.userId) ||isAdmin &&
         <div className="flex justify-end items-center">
             <FaEdit className="text-green-600 text-xl cursor-pointer me-3" 
             onClick={()=>setOpen(true)}

@@ -1,8 +1,12 @@
+import ProtectForAdmin from "@/components/ProtectForAdmin"
 
 
 const AdminPage = () => {
   return (
-    <div>AdminPage</div>
+    <ProtectForAdmin>
+      <div>AdminPage</div>
+
+    </ProtectForAdmin>
   )
 }
 

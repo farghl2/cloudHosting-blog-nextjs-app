@@ -42,6 +42,7 @@ const SingleArticlePage = async ({ params }: SingleArticlePageProps) => {
       {article.comments.map(comment=>
       <CommentItem 
       userId={payload?.id || ''}
+      isAdmin={payload?.isAdmin ||false}
       key={comment.id} articleComment={comment}/>
 
       )}

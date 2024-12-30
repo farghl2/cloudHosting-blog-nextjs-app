@@ -2,6 +2,8 @@
 import { useState } from "react"
 import CustomInput from "@/components/CustomInput"
 import { toast } from "react-toastify"
+import axios, { AxiosError } from "axios"
+import { DOMAIN } from "@/utils/constants"
 
 const AddArticleForm = () => {
     const [article, setArticle] = useState({
@@ -9,12 +11,26 @@ const AddArticleForm = () => {
         description:''
     })
 
-    const formSubmitHandler =(e:React.FormEvent)=>{
+    const formSubmitHandler = async(e:React.FormEvent)=>{
         e.preventDefault();
         if(article.title === "") return toast.error('title is Required')
         if(article.description === "") return toast.error('description is Required')
-        console.log(article);
+        try {
+      await axios.post(`${DOMAIN}/articles`,{...article})
+      toast.success('Article added successfuly');
+      setArticle({
+         title:'',
+        description:''
+      })
+          
+        } catch (error) {
+          if(error instanceof AxiosError){
+            toast.error(error.response?.data?.message);
 
+          }else{
+            toast.error('An unexpected error occurred');
+          }
+        }
 
     }
   return (
@@ -35,7 +51,7 @@ const AddArticleForm = () => {
             className="text-2xl text-white bg-blue-700 hover:bg-blue-900 p-2 rounded-lg font-bold"
           
           >
-            Log In
+            Add Article
           </button>
         </form>
   )
