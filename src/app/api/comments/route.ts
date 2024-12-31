@@ -1,6 +1,7 @@
 import prisma from "@/utils/db";
 import { CreateCommentDto } from "@/utils/dtos";
 import { verifyToken } from "@/utils/verifyToken";
+
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -49,7 +50,7 @@ export async function GET(req: NextRequest){
         const user = verifyToken(req);
         if(user === null || user.isAdmin === false ) return NextResponse.json({message: 'admins only can get all comment, accept denied'}, {status: 403});
         const comments =await prisma.comment.findMany();
-        return comments
+        return NextResponse.json({comments},{status:200})
     } catch (error) {
         return NextResponse.json({message:`internal server error ${error}`}, {status:500})
         
